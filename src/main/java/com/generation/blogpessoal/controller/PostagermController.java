@@ -73,17 +73,20 @@ public class PostagermController {
 	}
 	
 	
-	// MÉTODOS DE DELETAR POSTAGEM
+	// MÉTODOS DE DELETAR POSTAGEM - ATUALIZADO
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
+	public ResponseEntity<String> delete(@PathVariable Long id) {
 		Optional<Postagem> postagem = postagemRepository.findById(id);
 		
 		if(postagem.isEmpty())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		postagemRepository.deleteById(id);
+			//return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontrado uma postagem com o id: " + id);
 		
+		postagemRepository.deleteById(id);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Postagem com id: " + id + " deletada com sucesso!");
+
 	}
 	
 	
